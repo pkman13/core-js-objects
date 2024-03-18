@@ -181,7 +181,7 @@ function Rectangle(width, height) {
   this.width = width;
   this.height = height;
 
-  Rectangle.prototype.getArea = function getArea() {
+  this.getArea = function getArea() {
     return this.width * this.height;
   };
 }
@@ -245,8 +245,13 @@ function fromJSON(proto, json) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country === b.country) {
+      return a.city.localeCompare(b.city);
+    }
+    return a.country.localeCompare(b.country);
+  });
 }
 
 /**
@@ -279,8 +284,20 @@ function sortCitiesArray(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+
+  array.forEach((item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+
+    if (!map.has(key)) {
+      map.set(key, [value]);
+    } else {
+      map.get(key).push(value);
+    }
+  });
+  return map;
 }
 
 /**
